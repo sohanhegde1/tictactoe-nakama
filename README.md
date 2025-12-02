@@ -1,8 +1,8 @@
 # TicTacToe — Socket.io + Express Multiplayer
 
-> Repo: [https://github.com/sohanhegde1/tictactoe-nakama](https://github.com/sohanhegde1/tictactoe-nakama)
->
-> Live demo (deployed on Render): [https://tictactoe-nakama-1.onrender.com/](https://tictactoe-nakama-1.onrender.com/)
+###Repo: [https://github.com/sohanhegde1/tictactoe-nakama](https://github.com/sohanhegde1/tictactoe-nakama)
+ 
+###Live demo (deployed on Render): [https://tictactoe-nakama-1.onrender.com/](https://tictactoe-nakama-1.onrender.com/)
 **Note:*My render deployment may take upto 1-2 minutes to star as i am using Render free tier.
 
 **Implementation note:** The project was originally planned to use **Nakama** for realtime/match functionality. I attempted to deploy a Nakama cloud instance but was unable to complete the free-tier signup because the payment card was not accepted. To keep the timeline and demo working, I pivoted to a backend implemented with **Express + Socket.io** while preserving the required server-authoritative multiplayer functionality and UX. The README below describes the current, deployed implementation.
