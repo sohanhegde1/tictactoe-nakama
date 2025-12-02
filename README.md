@@ -3,7 +3,7 @@
 > Repo: [https://github.com/sohanhegde1/tictactoe-nakama](https://github.com/sohanhegde1/tictactoe-nakama)
 >
 > Live demo (deployed on Render): [https://tictactoe-nakama-1.onrender.com/](https://tictactoe-nakama-1.onrender.com/)
-> Note: It may take upto 1 minute to start running as i am using the free tier of render
+**Note:*My render deployment may take upto 1-2 minutes to star as i am using Render free tier.
 
 **Implementation note:** The project was originally planned to use **Nakama** for realtime/match functionality. I attempted to deploy a Nakama cloud instance but was unable to complete the free-tier signup because the payment card was not accepted. To keep the timeline and demo working, I pivoted to a backend implemented with **Express + Socket.io** while preserving the required server-authoritative multiplayer functionality and UX. The README below describes the current, deployed implementation.
 
@@ -231,6 +231,8 @@ Security / production considerations:
 ## How to test the multiplayer functionality
 
 ### Quick manual test
+
+**Render demo (fastest):** Open the deployed site on Render — `https://tictactoe-nakama-1.onrender.com/` — in **two different browser tabs** (or one normal + one incognito). Create a match from one tab and join from the other; you will immediately see the multiplayer functionality (realtime moves, turn enforcement, and match updates) without running anything locally.
 
 1. Start backend and frontend locally (or use the deployed frontend pointing to your running backend).
 2. Open the app in two browser windows (or one normal + one incognito).
