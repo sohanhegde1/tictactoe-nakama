@@ -9,19 +9,7 @@
 
 ---
 
-## Table of contents
 
-* [Project overview](#project-overview)
-* [Prerequisites](#prerequisites)
-* [Setup & installation](#setup--installation)
-* [Architecture & design decisions](#architecture--design-decisions)
-* [Deployment process](#deployment-process)
-* [API / Server configuration details](#api--server-configuration-details)
-* [How to test the multiplayer functionality](#how-to-test-the-multiplayer-functionality)
-* [Troubleshooting & tips](#troubleshooting--tips)
-* [License & contact](#license--contact)
-
----
 
 ## Project overview
 
@@ -42,7 +30,6 @@ This README now reflects the actual repository layout and the files used in this
 ├─ shared/            # Shared utilities/types used by client & server
 ├─ script/            # miscellaneous scripts (build/deploy helpers)
 ├─ README.md
-├─ design.md
 ├─ package.json
 ├─ vite.config.ts
 └─ tsconfig.json
@@ -151,7 +138,197 @@ socket.emit('make_move', { matchId: 'abc', index: 4, player: 'X' });
 ```
 
 ---
+## Design Approach
+**System-Based with Gaming Polish**: Material Design principles adapted for casual gaming, prioritizing clarity and real-time feedback while maintaining a playful, engaging aesthetic.
 
+## Core Design Principles
+1. **Gameplay First**: All UI elements support immediate game comprehension and action
+2. **Mobile-Optimized**: Touch-friendly, thumb-zone aware layouts
+3. **Real-time Clarity**: Visual feedback for all state changes (player moves, turn switches, matchmaking)
+4. **Minimal Cognitive Load**: Simple, focused screens with clear CTAs
+
+---
+
+## Typography
+
+**Primary Font**: Inter (via Google Fonts CDN)
+- Headings: 600-700 weight, used for game status, screen titles
+- Body: 400-500 weight for player names, stats, leaderboard entries
+- Monospace variant for timer countdowns if implemented
+
+**Scale**:
+- Large: 32-40px (screen titles, game result)
+- Medium: 20-24px (player names, current turn indicator)
+- Small: 14-16px (stats, timestamps, secondary info)
+- Micro: 12px (metadata, footer text)
+
+---
+
+## Layout System
+
+**Spacing Primitives**: Tailwind units of **4, 6, 8, 12, 16** (p-4, m-6, gap-8, etc.)
+
+**Container Strategy**:
+- Max width: `max-w-md` (448px) for game screens - keeps board proportional on desktop
+- Full width on mobile with `px-4` padding
+- Centered layouts: `mx-auto` for all game containers
+
+**Vertical Rhythm**:
+- Screen padding: `py-8` (mobile), `py-12` (desktop)
+- Section spacing: `space-y-6` between major UI blocks
+- Component internal spacing: `p-4` to `p-6`
+
+---
+
+## Component Library
+
+### Game Board
+- 3x3 grid with equal square cells
+- Responsive sizing: `aspect-square` for each cell
+- Grid gap: `gap-2` (8px between cells)
+- Cell dimensions: Calculate to fit mobile viewport (~100-120px per cell on phones)
+- Border treatment: Rounded corners `rounded-lg` on cells, subtle borders
+
+### Player Cards
+- Horizontal layout showing: avatar placeholder, name, score indicator
+- Fixed height: `h-16` to `h-20`
+- Display both players side-by-side or stacked depending on screen state
+- Active player gets visual emphasis (border glow, subtle scale)
+
+### Match Status Banner
+- Fixed position at top: shows "Your Turn" / "Opponent's Turn" / "Searching for opponent..."
+- Height: `h-12` to `h-16`
+- Icon + text combination using Heroicons (clock, user-group, trophy icons)
+
+### Leaderboard Entries
+- List items with rank badge, player name, W/L/Streak stats
+- Row height: `h-14` to `h-16`
+- Alternating subtle background for readability
+- Current player row highlighted distinctly
+
+### Modal Overlays
+- Match result screen (Win/Lose/Draw) as full-screen overlay
+- Backdrop blur: `backdrop-blur-sm`
+- Content card: `rounded-2xl`, centered with `max-w-sm`
+- Action buttons: Primary "Play Again", Secondary "Back to Lobby"
+
+### Navigation
+- Bottom tab bar on mobile: Home, Leaderboard, Profile (3-4 tabs max)
+- Icon-first with small labels
+- Height: `h-16`, safe area padding on notched devices
+
+---
+
+## Icons
+**Library**: Heroicons via CDN (outline style for most UI, solid for active states)
+
+**Key Icons**:
+- Users/user-group: Multiplayer/matchmaking
+- Trophy: Wins, leaderboard
+- Clock: Timer mode
+- X-mark, Check: Game symbols
+- Arrow-path: Rematch
+- Bars-3: Menu
+
+---
+
+## Images
+
+### Avatar Placeholders
+- **Location**: Player cards, leaderboard entries
+- **Style**: Circular, 40-48px diameter, placeholder initials or simple geometric patterns
+- **Description**: Generated colored circles with player initials in white text
+
+### Game State Illustrations
+- **Location**: Empty states (waiting for match, no leaderboard data yet)
+- **Style**: Simple line art or minimal illustrations, 120-200px size
+- **Description**: 
+  - Matchmaking: Two user silhouettes with connecting line
+  - Empty leaderboard: Trophy with dashed outline
+  - Connection lost: Broken chain link icon
+
+### Result Screen Icons
+- **Location**: Game over modal
+- **Style**: Large icon (80-100px) above result text
+- **Description**:
+  - Win: Trophy or star burst (celebratory)
+  - Loss: Neutral game-over icon
+  - Draw: Handshake or equal symbol
+
+**No Hero Image**: This is an application interface, not a landing page
+
+---
+
+## Screen Structure
+
+### Main Screens (4-5 primary views)
+
+1. **Lobby/Home**
+   - "Find Match" large button (primary CTA)
+   - Player stats card (compact: name, recent W/L)
+   - Recent matches list (last 3-5 games)
+
+2. **Matchmaking**
+   - Centered spinner/animation
+   - "Searching for opponent..." text
+   - Cancel button below
+
+3. **Active Game**
+   - Top: Match status banner
+   - Upper: Opponent card
+   - Center: Game board (dominant focus)
+   - Lower: Your player card
+   - Bottom: Safe padding above nav bar
+
+4. **Leaderboard**
+   - Filter tabs: Global / Friends (if applicable)
+   - Scrollable ranked list
+   - Your rank highlighted/pinned at top if not in view
+
+5. **Profile/Stats**
+   - Win/Loss/Draw percentages
+   - Win streak tracker
+   - Match history
+
+---
+
+## Animations
+**Minimal, Purposeful Only**:
+- Cell selection: Quick scale bounce (0.2s)
+- Turn switch: Gentle fade transition on status banner
+- Matchmaking: Subtle pulse on search indicator
+- Victory: Confetti or particle burst (brief, 1-2s)
+
+**No**: Excessive page transitions, decorative animations, background effects
+
+---
+
+## State Indicators
+
+**Visual Feedback Patterns**:
+- Active turn: Glowing border on player card
+- Opponent thinking: Subtle pulse on their avatar
+- Move made: Brief flash on board cell
+- Connection issues: Banner notification with retry button
+- Loading states: Skeleton screens, not blank white
+
+---
+
+## Accessibility
+- Touch targets: Minimum 48x48px for all interactive elements
+- Contrast ratios: WCAG AA compliance for all text
+- Focus indicators: Visible keyboard focus rings
+- Screen reader: Proper ARIA labels for game state, turn order
+- Reduced motion: Respect `prefers-reduced-motion` for all animations
+
+---
+
+## Key Differentiators
+- **Not** a traditional three-column card layout - game board is the hero
+- Compact, game-focused UI without marketing fluff
+- Real-time status always visible, never hidden
+- Mobile-first proportions that scale up gracefully
+- Playful without being childish - appeal to all ages
 ## Architecture & design decisions
 
 ### Overview
@@ -192,24 +369,9 @@ Production notes:
 * If running multiple backend instances, use a shared store or adapter (Redis) for pub/sub so Socket.io can broadcast across nodes (use `socket.io-redis`/`@socket.io/redis-adapter`).
 * Configure health checks and process managers (PM2) to keep the server healthy.
 
-### Frontend deployment
-
-* Deploy the static frontend on Render, Netlify, Vercel, or any static host. Set `REACT_APP_SOCKET_SERVER_URL` (or equivalent) in the host environment variables.
-* If serving frontend from the same Node server, add a static build step (`app.use(express.static('build'))`) and serve `index.html` on unknown routes.
-
 ---
 
 ## API / Server configuration details
-
-Environment variables (suggested):
-
-```
-PORT=4000
-FRONTEND_URL=https://tictactoe-nakama-1.onrender.com
-SOCKET_PATH=/socket.io
-NODE_ENV=production
-REDIS_URL=redis://...   # optional if using Redis adapter
-```
 
 Socket.io events and payloads (summary):
 
@@ -219,14 +381,38 @@ Socket.io events and payloads (summary):
 * `match_update` — server -> `{ matchId, board, players, turn, status }`
 * `error` — server -> `{ code, message }`
 
-Security / production considerations:
 
-* Validate/sanitize all inputs on the server.
-* If you implement authentication, issue a session token and attach it to the socket on connection.
-* Rate-limit or debounce actions if you expect abusive clients.
-* If running horizontally, use a Redis adapter for Socket.io to coordinate events between nodes.
+### Leaderboard
+- Create leaderboard with ID: `tictactoe_wins`
+- Order: descending (highest wins first)
+- Operator: best (track highest score)
 
----
+### Storage Collections
+- `player_stats`: Stores wins, losses, draws, streaks
+- `match_history`: Stores recent match results
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Building for Production
+```bash
+npm run build
+```
+
+## Features
+
+- **Real-time Multiplayer**: WebSocket-based game state synchronization
+- **Matchmaking**: Automatic 2-player matchmaking queue
+- **Leaderboards**: Global rankings with win tracking
+- **Player Stats**: Wins, losses, draws, win streaks
+- **Achievements**: Milestone-based unlock system
+- **Dark Mode**: System-aware theme toggle
+- **Mobile-First**: Responsive design with touch-friendly UI
+
 
 ## How to test the multiplayer functionality
 
@@ -236,7 +422,7 @@ Security / production considerations:
 
 1. Start backend and frontend locally (or use the deployed frontend pointing to your running backend).
 2. Open the app in two browser windows (or one normal + one incognito).
-3. In Window A: create a new match (or start quick-match) as Player X.
+3. In Window A: join match as Player X.
 4. In Window B: join the same match as Player O.
 5. Play moves in alternating turns — both clients should update in realtime.
 6. Try edge cases:
@@ -248,28 +434,3 @@ Security / production considerations:
 ### Local multi-device test via `ngrok`
 
 If you need to test from different devices on the same network or over the internet, run `ngrok http 4000` and set your frontend socket URL to the `ngrok` HTTPS address.
-
-### Automated tests
-
-* **Unit tests**: Validate board handling and win/draw logic using Jest.
-* **Integration / E2E**: Use Playwright or Cypress to spin up two browser contexts and script a full match flow.
-* **Load / resilience tests**: For many simultaneous games, script multiple socket clients (e.g., using `socket.io-client` in Node) to ensure the server and event flow remain stable.
-
----
-
-## Troubleshooting & tips
-
-* If sockets fail to connect, check the server URL, port, and whether the server is reachable from the client. Also verify CORS/socket path settings.
-* For mixed-content (HTTPS frontend, HTTP socket) — use WSS (secure WebSocket) or serve frontend over HTTP in dev.
-* When scaling, use Redis adapter to share events between backend instances.
-* Use server logs and browser DevTools (Network → WS frames) to inspect socket messages.
-
----
-
-## License & contact
-
-MIT License — feel free to reuse and adapt. If you want me to update the README to include exact folder names, scripts from your `package.json`, or to add a sample `Procfile`, `nginx` config, or `dockerfile`, tell me and I will update it.
-
----
-
-*Last updated: 2025-12-02*
