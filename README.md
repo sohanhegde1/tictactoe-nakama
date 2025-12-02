@@ -35,22 +35,6 @@ This README now reflects the actual repository layout and the files used in this
 └─ tsconfig.json
 ```
 
-> Note: I inspected your repo and used these real folder names when updating the README. Replace or expand these entries if your local layout differs.
-
----
-
-## Prerequisites
-
-* Node.js (LTS) and npm or yarn
-* Git
-* A modern web browser for testing (Chrome/Firefox recommended)
-
-Optional tools:
-
-* `ngrok` (to expose a local server for testing on multiple devices)
-* `tc` (Linux `netem`) or other network shaping tools to simulate latency
-
----
 
 ## Setup & installation
 
@@ -65,79 +49,8 @@ cd tictactoe-nakama
 
 2. Install dependencies
 
-If the project has separate `client/` and `server/` folders:
+run `npm install` at the repo root.
 
-```bash
-# install frontend deps
-cd client
-npm install
-
-# in a separate terminal, install backend deps
-cd ../server
-npm install
-```
-
-If the repo is single-package, run `npm install` at the repo root.
-
-3. Start the backend (Express + Socket.io)
-
-The backend code lives in `server/`. Typical commands (from the repo root):
-
-```bash
-# install server deps
-cd server
-npm install
-
-# development (watch) — uses the script defined in server/package.json
-npm run dev
-
-# production build & start (if using TypeScript build)
-npm run build
-npm start
-```
-
-Check `server/package.json` for available scripts (e.g. `dev`, `build`, `start`). The primary server entrypoint in this repo is `server/src/index.ts` (or `server/index.js` after build) — open these files in your editor to see the exact initialization and Socket.io setup used in the project.
-
-If you want, I can also paste the exact `server/src/index.ts` startup snippet into the README — paste it here or allow me to pull it from the repo and I will update the doc with the exact code.
-
-```
-
-4. Configure frontend to connect to backend
-
-Create or update your `.env` in the frontend with the server URL. Example:
-
-```
-
-REACT_APP_SOCKET_SERVER_URL=[http://localhost:4000](http://localhost:4000)
-
-````
-
-5. Start the frontend
-
-```bash
-cd client
-npm start
-````
-
-Open the app at `http://localhost:3000` (or your dev server port).
-
-Client-side socket.io example (using `socket.io-client`):
-
-```js
-import { io } from 'socket.io-client';
-const SOCKET_URL = process.env.REACT_APP_SOCKET_SERVER_URL || 'http://localhost:4000';
-const socket = io(SOCKET_URL, { transports: ['websocket'] });
-
-socket.on('connect', () => console.log('connected', socket.id));
-socket.on('match_update', (match) => updateUI(match));
-
-// create/join/move
-socket.emit('create_match', { matchId: 'abc', player: 'X' });
-socket.emit('join_match', { matchId: 'abc', player: 'O' });
-socket.emit('make_move', { matchId: 'abc', index: 4, player: 'X' });
-```
-
----
 ## Design Approach
 **System-Based with Gaming Polish**: Material Design principles adapted for casual gaming, prioritizing clarity and real-time feedback while maintaining a playful, engaging aesthetic.
 
