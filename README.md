@@ -15,9 +15,17 @@
 
 This project is a server-authoritative, real-time multiplayer Tic-Tac-Toe game implemented with **Express** (Node.js) on the backend and **Socket.io** for realtime communication. The frontend is a web client (React or similar) that connects to the Express/Socket.io server. The live demo is available at the URL above.
 
-This README covers how to run the app locally, architecture and key design choices, deployment notes, server/config details, and how to test multiplayer flows.
 
+## Gameflow
 ---
+1. User enters lobby
+2. Clicks "Find Match"
+3. Join matchmaking queue
+4. Wait for opponent (real-time via Socket.io)
+5. Game starts, sync moves in real-time
+6. Server validates each move
+7. Display result, save to leaderboard
+8. Option: rematch or return to lobby
 
 ## Repository structure
 
