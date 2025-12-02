@@ -324,17 +324,6 @@ npm run dev
 npm run build
 ```
 
-## Features
-
-- **Real-time Multiplayer**: WebSocket-based game state synchronization
-- **Matchmaking**: Automatic 2-player matchmaking queue
-- **Leaderboards**: Global rankings with win tracking
-- **Player Stats**: Wins, losses, draws, win streaks
-- **Achievements**: Milestone-based unlock system
-- **Dark Mode**: System-aware theme toggle
-- **Mobile-First**: Responsive design with touch-friendly UI
-
-
 ## How to test the multiplayer functionality
 
 ### Quick manual test
